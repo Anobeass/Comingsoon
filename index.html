@@ -1,0 +1,714 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="Icon" type="image/png" href="/logo/icon.png">
+    <title>Anobeass Coming soon</title>
+    <style>
+        :root {
+            --bg: #F6F6F4;
+            --fg: #111111;
+            --white: #FFFFFF;
+            --accent-1: #E8DCCB;
+            --accent-2: #DCD0D8;
+            --accent-3: #E1E6E1;
+            --base-100: #fafafa;
+            --base-200: #e8e6e7;
+            --base-300: #d3d2d2;
+            --base-400: #0f0f0f;
+
+            --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-mono: "Space Mono", "Courier New", Courier, monospace;
+
+            --border-thin: 1px solid var(--fg);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        h1, h2, h3, .display-text {
+            font-weight: 500;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+        }
+
+        .micro-text {
+            font-size: 0.65rem;
+            line-height: 1.4;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .pill {
+            border: var(--border-thin);
+            border-radius: 50px;
+            padding: 0.3em 0.8em;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .pill.active {
+            background: var(--fg);
+            color: var(--white);
+        }
+
+        .pill-large {
+            border: 1.5px solid var(--fg);
+            border-radius: 100px;
+            padding: 0.1em 0.4em;
+            display: inline-flex;
+            align-items: center;
+            transform: translateY(-0.05em);
+        }
+
+        .btn-solid {
+            background: var(--fg);
+            color: var(--bg);
+            border: none;
+            border-radius: 50px;
+            padding: 0.8em 1.5em;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-solid:hover { opacity: 0.8; }
+
+        .link-underline {
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--fg);
+            padding-bottom: 2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+            padding-top: 7rem;
+        }
+
+        /* ── FLOATING MENU ── */
+        .menu-drop-zone {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            height: calc(3.5rem + 0.7rem);
+            border: 0.075rem dashed rgba(0, 0, 0, 0.5);
+            border-radius: 4rem;
+            transition: opacity 0.2s ease-out;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 999;
+        }
+
+        .menu-drawer {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            padding: 0.35rem;
+            background-color: var(--base-200);
+            border-radius: 4rem;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .menu-logo {
+            width: 4rem;
+            height: 3.5rem;
+            padding-left: 0.5rem;
+            border-radius: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .menu-logo img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 0.35rem;
+            overflow: hidden;
+        }
+
+        .menu-items .menu-item {
+            width: max-content;
+            height: 3.5rem;
+            background-color: var(--base-100);
+            border-radius: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            opacity: 0;
+        }
+
+        .menu-items .menu-item a {
+            text-decoration: none;
+            color: var(--base-400);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            padding: 0 1.5rem;
+            user-select: none;
+        }
+
+        .menu-items .menu-item a {
+    transition: opacity 0.3s ease;
+}
+
+.menu-items .menu-item:hover a {
+    opacity: 0.5;
+}
+
+        .menu-toggler {
+            position: relative;
+            width: 3.5rem;
+            height: 3.5rem;
+            padding: 1.125rem;
+            background-color: var(--base-300);
+            border-radius: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.2rem;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .menu-toggler span {
+            position: relative;
+            width: 100%;
+            height: 0.125rem;
+            background-color: var(--base-400);
+            transition: transform 0.3s ease;
+            transform-origin: center;
+            will-change: transform;
+        }
+
+        .menu-toggler.close span:nth-child(1) {
+            transform: rotate(45deg) translateX(0.125rem) translateY(0.1rem) scaleX(0.9);
+        }
+
+        .menu-toggler.close span:nth-child(2) {
+            transform: rotate(-45deg) translateX(0.125rem) translateY(-0.1rem) scaleX(0.9);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            margin-left: -0.05em;
+        }
+
+        .hero-title .line {
+            display: block;
+            margin-bottom: 0.1em;
+        }
+
+        .hero-sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 2rem;
+            padding-top: 1rem;
+        }
+
+        .stamp-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-self: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .stamp-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: spin 20s linear infinite;
+        }
+
+        .stamp-center {
+            cursor: pointer;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: var(--fg);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .hero-sidebar .micro-text {
+            max-width: 280px;
+            text-align: justify;
+            text-align-last: left;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ── PROJECT SECTION ── */
+        .project-section {
+            display: grid;
+            grid-template-columns: 3fr 7fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .project-card-container {
+            position: relative;
+        }
+
+        .sunburst {
+            position: absolute;
+            left: -20px;
+            top: 20%;
+            width: 80px;
+            height: 80px;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .geo-line {
+            display: inline-block;
+            width: 30px;
+            height: 1px;
+            background: var(--fg);
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        /* ── DATA SECTION ── */
+        .data-section {
+            border-top: var(--border-thin);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .data-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+            transition: border-color 0.2s ease;
+        }
+
+        .social-link:hover {
+            border-bottom-color: var(--fg);
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ── RESPONSIVE: TABLET ── */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 2rem;
+                padding-top: 7rem;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-bottom: 4rem;
+            }
+
+            .hero-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+
+            .hero-sidebar .micro-text {
+                max-width: 100%;
+            }
+
+            .stamp-container {
+                align-self: flex-start;
+                margin-bottom: 0;
+            }
+
+            .project-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-bottom: 4rem;
+            }
+        }
+
+        /* ── RESPONSIVE: MOBILE ── */
+        @media (max-width: 767px) {
+            .container {
+                padding: 1.5rem 1.25rem;
+                padding-top: 6.5rem;
+            }
+
+            .hero { margin-bottom: 3rem; }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 14vw, 4rem);
+            }
+
+            .hero-sidebar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .stamp-container {
+                align-self: center;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .project-section { margin-bottom: 3rem; }
+
+            .data-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+
+            .footer-socials { gap: 1rem; }
+
+            .menu-drawer {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .menu-drop-zone {
+                top: 1rem;
+                left: 1rem;
+                height: calc(3rem + 0.7rem);
+            }
+
+            .menu-logo {
+                width: 3rem;
+            }
+
+            .menu-logo img {
+                width: 28px;
+                height: 28px;
+            }
+
+            .menu-toggler {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .menu-items .menu-item {
+                height: 3rem;
+            }
+
+            .menu-items .menu-item a {
+                padding: 0 1rem;
+                font-size: 0.6rem;
+
+            }
+            .menu-items .menu-item a {
+                transition: opacity 0.3s ease;
+}
+
+    .menu-items .menu-item:hover a {
+            opacity: 0.5;
+}
+        }
+
+        /* ── RESPONSIVE: SMALL MOBILE ── */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+                padding-top: 6rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 16vw, 3rem);
+            }
+
+            .btn-solid {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .link-underline {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-socials {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FLOATING MENU -->
+    <div class="menu-drop-zone"></div>
+    <div class="menu-drawer">
+        <div class="menu-logo">
+            <img src="/logo/Logo.svg" alt="Logo">
+        </div>
+        <div class="menu-items">
+            <div class="menu-item"><a href="/404.html">INDEX</a></div>
+            <div class="menu-item"><a href="/404.html">PROFILE</a></div>
+            <div class="menu-item"><a href="/404.html">EXPERTISE</a></div>
+            <div class="menu-item"><a href="/404.html">ARCHIVE</a></div>
+        </div>
+        <div class="menu-toggler">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <h1 class="hero-title">
+                <span class="line">Coming</span>
+                <span class="line">Soon</span>
+                <span class="line"><span class="pill-large">Anobeass</span></span>
+            </h1>
+
+            <div class="hero-sidebar">
+                <div class="stamp-container">
+                    <svg class="stamp-text" viewBox="0 0 100 100">
+                        <path id="textPath" d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" fill="none"></path>
+                        <text font-size="9" font-weight="600" letter-spacing="0.1em" fill="currentColor">
+                            <textPath href="#textPath" startOffset="0%"> Anobeass The Crow  - Ano's Portfolio -  </textPath>
+                        </text>
+                    </svg>
+                    <div class="stamp-center" onclick="window.open('https://drive.google.com/file/d/1bTDFsmMioVR4A4PVjFsT4kHGfm9noqTI/view', '_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </div>
+                </div>
+
+                <p class="micro-text">
+                    Strategic Brand Designer focused on translating business vision into clear, differentiated brand systems that actually compete in the market.
+                    I build strategy-first identities that align positioning, messaging, and visual language into one cohesive direction.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="btn-solid" onclick="window.open('https://drive.google.com/file/d/1bTDFsmMioVR4A4PVjFsT4kHGfm9noqTI/view', '_blank')">VIEW PORTFOLIO</button>
+                    <a href="mailto:anobeassale@gmail.com" class="link-underline">Contact Ano ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT SECTION -->
+        <section class="project-section">
+            <div class="project-card-container">
+                <svg class="sunburst" viewBox="0 0 100 100">
+                    <path d="M50,0 L53,38 L90,10 L62,47 L100,50 L62,53 L90,90 L53,62 L50,100 L47,62 L10,90 L38,53 L0,50 L38,47 L10,10 L47,38 Z" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- DATA / FOOTER SECTION -->
+        <section class="data-section">
+            <div class="data-column">
+                <div class="data-header">Anobeass</div>
+                <div class="micro-text">
+                    <svg width="24" height="10" viewBox="0 0 24 10" fill="none" stroke="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                        <path d="M2,5 C5,1 7,9 10,5 C13,1 15,9 18,5 C21,1 23,9 26,5" stroke-width="1"></path>
+                    </svg>
+                    <span class="geo-line"></span> Strategic Brand Designer
+                </div>
+            </div>
+
+            <div class="data-column">
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/anobeass/" class="social-link">INSTAGRAM</a>
+                    <a href="https://www.behance.net/anobeass" class="social-link">BEHANCE</a>
+                    <a href="https://www.linkedin.com/in/anobeass/" class="social-link">LINKEDIN</a>
+                    <a href="https://www.facebook.com/Anobeass" class="social-link">FACEBOOK</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- GSAP from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+    <script>
+        gsap.registerPlugin(Draggable);
+
+        const menuDropZone = document.querySelector(".menu-drop-zone");
+        const menuDrawer = document.querySelector(".menu-drawer");
+        const menuLogo = document.querySelector(".menu-logo");
+        const menuItems = document.querySelector(".menu-items");
+        const menuItemElements = document.querySelectorAll(".menu-item");
+        const menuToggler = document.querySelector(".menu-toggler");
+
+        let isMenuOpen = false;
+
+        const menuItemsFullWidth = menuItems.scrollWidth;
+        const drawerGap = 0.35 * 16;
+        const drawerPadding = 0.35 * 16;
+        const logoWidth = menuLogo.offsetWidth;
+        const togglerWidth = menuToggler.offsetWidth;
+
+        const closedMenuWidth = drawerPadding + logoWidth + drawerGap + togglerWidth + drawerPadding;
+        const openMenuWidth = drawerPadding + logoWidth + drawerGap + menuItemsFullWidth + drawerGap + togglerWidth + drawerPadding;
+
+        gsap.set(menuItems, { width: 0, marginRight: 0 });
+        gsap.set(menuItemElements, { opacity: 0, scale: 0.85 });
+        gsap.set(menuDropZone, { width: closedMenuWidth });
+
+        function toggleMenu() {
+            if (isMenuOpen) { closeMenu(); } else { openMenu(); }
+            isMenuOpen = !isMenuOpen;
+        }
+
+        menuToggler.addEventListener("click", toggleMenu);
+
+        function openMenu() {
+            menuToggler.classList.add("close");
+            gsap.to(menuItems, {
+                width: menuItemsFullWidth,
+                marginRight: drawerGap,
+                duration: 0.5,
+                ease: "power3.inOut",
+                onStart: () => {
+                    gsap.to(menuItemElements, {
+                        opacity: 1, scale: 1, duration: 0.3,
+                        stagger: 0.05, delay: 0.2, ease: "power3.out",
+                    });
+                },
+            });
+        }
+
+        function closeMenu() {
+            menuToggler.classList.remove("close");
+            gsap.to(menuItems, {
+                width: 0,
+                marginRight: 0,
+                duration: 0.5,
+                ease: "power3.inOut",
+                onStart: () => {
+                    gsap.to(menuItemElements, {
+                        opacity: 0, scale: 0.85, duration: 0.3,
+                        ease: "power3.out", stagger: { each: 0.05, from: "end" },
+                    });
+                },
+            });
+        }
+
+        const snapThreshold = 200;
+
+        Draggable.create(menuDrawer, {
+            type: "x,y",
+            bounds: window,
+            cursor: "grab",
+            activeCursor: "grabbing",
+            onDragStart: function () {
+                const activeMenuWidth = isMenuOpen ? openMenuWidth : closedMenuWidth;
+                gsap.set(menuDropZone, { width: activeMenuWidth });
+            },
+            onDrag: function () {
+                const inSnap = Math.abs(this.x) < snapThreshold && Math.abs(this.y) < snapThreshold;
+                gsap.to(menuDropZone, { opacity: inSnap ? 1 : 0, duration: 0.1 });
+            },
+            onDragEnd: function () {
+                gsap.to(menuDropZone, { opacity: 0, duration: 0.1 });
+                const inSnap = Math.abs(this.x) < snapThreshold && Math.abs(this.y) < snapThreshold;
+                if (inSnap) {
+                    gsap.to(menuDrawer, { x: 0, y: 0, duration: 0.3, ease: "power2.out" });
+                }
+            },
+        });
+    </script>
+
+</body></html>
